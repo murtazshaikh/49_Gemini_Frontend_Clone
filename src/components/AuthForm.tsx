@@ -22,6 +22,11 @@ type CountryOption = {
   dialCode: string;
 };
 
+interface CountryApiData {
+  idd: { root?: string; suffixes?: string[] };
+  name: { common: string };
+}
+
 export default function AuthForm() {
   const [countries, setCountries] = useState<CountryOption[]>([]);
   const [otpSent, setOtpSent] = useState(false);
@@ -42,7 +47,7 @@ export default function AuthForm() {
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all?fields=name,idd")
       .then((res) => res.json())
-      .then((data: { idd: any; name: { common: string } }[]) => {
+      .then((data: CountryApiData[]) => {
         const list = data
           .map((c) => {
             const root: string = c.idd?.root ?? "";
