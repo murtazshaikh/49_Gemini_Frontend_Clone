@@ -97,14 +97,6 @@ Visit `http://localhost:3000` to start.
 
 ---
 
-## 📸 Screenshots
-
-| Auth Flow | Chatroom Page | Dark Mode |
-|-----------|----------------|------------|
-| ![Auth](./public/screens/auth.png) | ![Dashboard](./public/screens/dashboard.png) | ![Dark](./public/screens/darkmode.png) |
-
----
-
 ## 🧑‍💻 Contributing
 
 1. Fork the project
