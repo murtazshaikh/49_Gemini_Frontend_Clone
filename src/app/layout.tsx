@@ -16,7 +16,7 @@ export default function RootLayout({
     const stored = localStorage.getItem("dark-mode");
     const isDark = stored === "true";
     setTheme(isDark);
-  }, []);
+  }, [setTheme]);
 
   return (
     <html>

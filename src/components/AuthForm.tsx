@@ -8,16 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
-const schemaStep1 = z.object({
+// Single schema with optional OTP
+const schema = z.object({
   countryCode: z.string().min(1, "Select a country code"),
   phone: z.string().min(5, "Enter valid phone number"),
+  otp: z.string().optional(), // ✅ optional, we'll check it conditionally
 });
 
-const schemaStep2 = schemaStep1.extend({
-  otp: z.string().min(4, "Enter OTP"),
-});
-
-type FormData = z.infer<typeof schemaStep2>;
+type FormData = z.infer<typeof schema>;
 
 type CountryOption = {
   name: string;
@@ -32,8 +30,8 @@ export default function AuthForm() {
   const login = useAuthStore((state) => state.login);
 
   const form = useForm<FormData>({
-  resolver: zodResolver(otpSent ? schemaStep2 : schemaStep1),
-});
+    resolver: zodResolver(schema),
+  });
 
   const {
     register,
@@ -42,36 +40,39 @@ export default function AuthForm() {
   } = form;
 
   useEffect(() => {
-    // Fetch country data
     fetch("https://restcountries.com/v3.1/all?fields=name,idd")
-    .then((res) => res.json())
-    .then((data: any[]) => {
-      const list = data
-        .map((c) => {
-          const root: string = c.idd?.root ?? "";
-          const suffix: string = c.idd?.suffixes?.[0] ?? "";
-          return {
-            name: c.name.common as string,
-            dialCode: root + suffix,
-          };
-        })
-        .filter((c) => c.dialCode);
+      .then((res) => res.json())
+      .then((data: { idd: any; name: { common: string } }[]) => {
+        const list = data
+          .map((c) => {
+            const root: string = c.idd?.root ?? "";
+            const suffix: string = c.idd?.suffixes?.[0] ?? "";
+            return {
+              name: c.name.common as string,
+              dialCode: root + suffix,
+            };
+          })
+          .filter((c) => c.dialCode);
 
-      const sorted = list.sort((a, b) => a.name.localeCompare(b.name));
-      setCountries(sorted);
-    });
+        const sorted = list.sort((a, b) => a.name.localeCompare(b.name));
+        setCountries(sorted);
+      });
   }, []);
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
     if (!otpSent) {
       setOtpSent(true);
       setTimeout(() => {
         alert("OTP sent (simulated)");
       }, 1000);
     } else {
+      if (!data.otp || data.otp.length < 4) {
+        alert("Please enter a valid OTP");
+        return;
+      }
+
       login(data.phone, data.countryCode);
-      router.push("/dashboard"); // ✅ redirect
+      router.push("/dashboard");
     }
   };
 

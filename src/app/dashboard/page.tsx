@@ -80,8 +80,8 @@ export default function DashboardPage() {
 
       <ul>
         {filtered.map((c) => (
-          <Link href={`/dashboard/${c.id}`}>
-            <li key={c.id} className={styles.chatroomItem}>
+          <Link key={c.id} href={`/dashboard/${c.id}`}>
+            <li className={styles.chatroomItem}>
               <span style={{ cursor: "pointer", fontWeight: "bold" }}>
                 {c.title}
               </span>
