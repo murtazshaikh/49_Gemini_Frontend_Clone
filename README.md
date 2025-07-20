@@ -23,15 +23,14 @@ This is a lightweight Gemini-style chat application built using **Next.js App Ro
 - [Zod](https://zod.dev/)
 - [React Hook Form](https://react-hook-form.com/)
 - [Sass / SCSS modules](https://sass-lang.com/)
-- [Tailwind CSS (optional)]
 
 ---
 
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/gemini-frontend-clone.git
-cd gemini-frontend-clone
+git clone https://github.com/murtazshaikh/49_Gemini_Frontend_Clone.git
+cd 49_Gemini_Frontend_Clone
 npm install
 ```
 
